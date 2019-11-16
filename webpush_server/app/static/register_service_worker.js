@@ -15,17 +15,20 @@ function urlB64ToUint8Array(base64String) {
   return outputArray;
 }
 
-function updateSubscriptionOnServer(subscription) {
+function updateSubscriptionOnServer(subscription, apiEndpoint) {
   // TODO: Send subscription to application server
 
-  return fetch('/api/save-subscription/', {
+  return fetch(apiEndpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(subscription)
+    body: JSON.stringify({
+      subscription_json: JSON.stringify(subscription)
+    })
   })
   .then(function(response) {
+    console.log("response ", response.json());
     if (!response.ok) {
       throw new Error('Bad status code from server.');
     }
@@ -39,7 +42,7 @@ function updateSubscriptionOnServer(subscription) {
   });
 }
 
-function subscribeUser(swRegistration, applicationServerPublicKey) {
+function subscribeUser(swRegistration, applicationServerPublicKey, apiEndpoint) {
   const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
   swRegistration.pushManager.subscribe({
     userVisibleOnly: true,
@@ -48,23 +51,24 @@ function subscribeUser(swRegistration, applicationServerPublicKey) {
   .then(function(subscription) {
     console.log('User is subscribed.');
 
-    updateSubscriptionOnServer(subscription);
+    updateSubscriptionOnServer(subscription, apiEndpoint);
 
   })
   .catch(function(err) {
     console.log('Failed to subscribe the user: ', err);
+    console.log(err.stack);
   });
 }
 
-function registerServiceWorker(serviceworker_url, applicationServerPublicKey){
+function registerServiceWorker(serviceWorkerUrl, applicationServerPublicKey, apiEndpoint){
   let swRegistration = null;
   if ('serviceWorker' in navigator && 'PushManager' in window) {
     console.log('Service Worker and Push is supported');
 
-    navigator.serviceWorker.register(serviceworker_url)
+    navigator.serviceWorker.register(serviceWorkerUrl)
     .then(function(swReg) {
       console.log('Service Worker is registered', swReg);
-      subscribeUser(swReg, applicationServerPublicKey);
+      subscribeUser(swReg, applicationServerPublicKey, apiEndpoint);
 
       swRegistration = swReg;
     })

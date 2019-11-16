@@ -50,7 +50,7 @@ security.init_app(app, user_datastore)
 def home():
     return render_template("index.html")
 
-@app.route("/push-subscriptions", methods=["POST"])
+@app.route("/api/push-subscriptions", methods=["POST"])
 def create_push_subscription():
     subscription_data = request.get_json()
     subscription = PushSubscription.new(

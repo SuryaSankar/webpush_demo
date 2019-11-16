@@ -9,6 +9,6 @@ register_crud_routes_for_models(
     {
         PushSubscription: {
             "url_slug": "push-subscriptions",
-            "permitted_operations": ["POST"]
+            "permitted_operations": ["post"]
         }
     })
