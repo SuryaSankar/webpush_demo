@@ -1,0 +1,17 @@
+<html>
+<body>
+	<h1>Webpush Demo</h1>
+	{% if current_user.is_authenticated %}
+		<p>You are logged in as {{current_user.email}}</p>
+	{% else %}
+		<p>You are not logged in yet</p>
+		<p>
+			<a href="{{url_for('security.login')}}">Login</a>
+		</p>
+		<p>
+			<a href="{{url_for('security.register')}}">Signup</a>
+		</p>
+	{% endif %}
+	<script type="text/javascript" src="{{url_for('static', filename='register_service_worker.js')}}"></script>
+</body>
+</html>

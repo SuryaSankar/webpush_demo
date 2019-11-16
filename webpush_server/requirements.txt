@@ -1,0 +1,9 @@
+flask
+sqlalchemy
+flask_sqlalchemy
+flask_sqlalchemy_booster
+flask_script
+flask_migrate
+flask_restless
+flask_security
+bcrypt
