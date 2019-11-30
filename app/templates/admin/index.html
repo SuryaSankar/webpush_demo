@@ -1,0 +1,48 @@
+<html>
+<head>
+	<link rel="icon" href="data:,">
+	<script
+	  src="https://code.jquery.com/jquery-3.4.1.min.js"
+	  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+	  crossorigin="anonymous"></script>
+</head>
+<body>
+	<h1>Trigger a Push Notification</h1>
+	<form method="POST" id="trigger-push-form" action="/admin-api/trigger-push-notifications">
+		<div>
+			<label for="title">Message Title: </label>
+			<input name="title"/>
+		</div>
+		<div>
+			<label for="body">Message Body: </label>
+			<textarea rows="10" cols="100" name="body"></textarea>
+		</div>
+		<input type="submit" value="Trigger Push">
+	</form>
+	<script type="text/javascript">
+		$(function(){
+			$("#trigger-push-form").submit(function(event){
+				event.preventDefault();
+				$.ajax({
+				  type: 'POST',
+				  url: $("#trigger-push-form").attr("action"),
+				  contentType: 'application/json',
+				  processData: false,
+				  data: JSON.stringify(
+					  			$("#trigger-push-form")
+					  			.serializeArray()
+					  			.reduce(function(result, item){
+											result[item.name] = item.value;
+											return result;
+										}, {})
+				  			), 
+				  success: function(response) {
+				  	console.log("received response ", response);
+				  },
+				});
+			});
+		});
+	</script>
+</body>
+</html>
+

@@ -1,7 +1,7 @@
 from flask import Blueprint, abort, request, jsonify
 from flask_security import current_user
-from ..webpush_handler import trigger_push_notifications_for_users
-from ..models.user import User
+from ..webpush_handler import trigger_push_notifications_for_subscriptions
+from ..models.push_subscription import PushSubscription
 
 admin_api_bp = Blueprint('admin_api_bp', __name__)
 
@@ -17,9 +17,8 @@ def restrict_admin_api_bp():
 @admin_api_bp.route("/trigger-push-notifications", methods=["POST"])
 def trigger_push_notifications():
     json_data = request.get_json()
-    users = User.get_all(json_data['user_ids'])
-    results = trigger_push_notifications_for_users(
-        users,
+    results = trigger_push_notifications_for_subscriptions(
+        PushSubscription.all(),
         json_data.get('title'),
         json_data.get('body')
     )

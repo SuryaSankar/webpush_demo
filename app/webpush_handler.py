@@ -14,7 +14,7 @@ def trigger_push_notification(push_subscription, title, body):
                     current_app.config["VAPID_CLAIM_EMAIL"])
             }
         )
-        return True
+        return response.ok
     except WebPushException as ex:
         if ex.response and ex.response.json():
             extra = ex.response.json()
@@ -26,11 +26,16 @@ def trigger_push_notification(push_subscription, title, body):
         return False
 
 
+def trigger_push_notifications_for_subscriptions(subscriptions, title, body):
+    return [trigger_push_notification(subscription, title, body)
+            for subscription in subscriptions]
+
+
 def trigger_push_notifications_for_user(user, title, body):
-    for subscription in user.push_subscriptions:
+    return [
         trigger_push_notification(subscription, title, body)
+        for subscription in user.push_subscriptions]
 
 
 def trigger_push_notifications_for_users(users, title, body, contents=None):
-    for user in users:
-        trigger_push_notifications_for_user(user, title, body)
+    return { user.id: trigger_push_notifications_for_user(user, title, body) for user in users}
