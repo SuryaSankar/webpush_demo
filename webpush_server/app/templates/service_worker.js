@@ -1,7 +1,7 @@
 'use strict';
 
 
-const applicationServerPublicKey = "BGV0Zro6QSeKDjPXqnW-nscEIEbNNS_qYTFDCxEw6bJuzfbHxpxbUiKkSun_iLbE_yROwJlcmPugILgs3MTejKI";
+const applicationServerPublicKey = "{{config['APPLICATION_SERVER_PUBLIC_KEY']}}";
 /* eslint-enable max-len */
 
 function urlB64ToUint8Array(base64String) {
@@ -29,19 +29,13 @@ self.addEventListener('activate', function(event) {
 
 self.addEventListener('push', function(event) {
   console.log('[Service Worker] Push Received.');
-  const pushData = event.data.text();
-  console.log(`[Service Worker] Push had this data - "${pushData}"`);
-  let data, title, body;
-  try {
-    data = JSON.parse(pushData);
-    title = data.title;
-    body = data.body;
-  } catch(e) {
-    title = "Untitled";
-    body = pushData;
-  }
+  console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
+
+  const title = 'Push Codelab';
   const options = {
-    body: body
+    body: 'Yay it works.',
+    icon: 'images/icon.png',
+    badge: 'images/badge.png'
   };
 
   event.waitUntil(self.registration.showNotification(title, options));

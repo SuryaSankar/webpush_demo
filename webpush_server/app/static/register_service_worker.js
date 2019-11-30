@@ -26,20 +26,8 @@ function updateSubscriptionOnServer(subscription, apiEndpoint) {
     body: JSON.stringify({
       subscription_json: JSON.stringify(subscription)
     })
-  })
-  .then(function(response) {
-    console.log("response ", response.json());
-    if (!response.ok) {
-      throw new Error('Bad status code from server.');
-    }
-
-    return response.json();
-  })
-  .then(function(responseData) {
-    if (!(responseData.data && responseData.data.success)) {
-      throw new Error('Bad response from server.');
-    }
   });
+
 }
 
 function subscribeUser(swRegistration, applicationServerPublicKey, apiEndpoint) {
@@ -51,8 +39,20 @@ function subscribeUser(swRegistration, applicationServerPublicKey, apiEndpoint) 
   .then(function(subscription) {
     console.log('User is subscribed.');
 
-    updateSubscriptionOnServer(subscription, apiEndpoint);
+    return updateSubscriptionOnServer(subscription, apiEndpoint);
 
+  })
+  .then(function(response) {
+    if (!response.ok) {
+      throw new Error('Bad status code from server.');
+    }
+    return response.json();
+  })
+  .then(function(responseData) {
+    console.log(responseData);
+    if (responseData.status!=="success") {
+      throw new Error('Bad response from server.');
+    }
   })
   .catch(function(err) {
     console.log('Failed to subscribe the user: ', err);

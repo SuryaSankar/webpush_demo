@@ -7,3 +7,4 @@ flask_migrate
 flask_restless
 flask_security
 bcrypt
+pywebpush

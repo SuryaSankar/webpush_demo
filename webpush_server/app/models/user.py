@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.Unicode(100), unique=True)
     password = db.Column(db.String(100))
     active = db.Column(db.Boolean)
+    is_admin = db.Column(db.Boolean, default=False)
 
     roles = db.relationship('Role', secondary=user_role)
 
