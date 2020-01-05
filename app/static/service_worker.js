@@ -1,7 +1,5 @@
 'use strict';
 
-
-const applicationServerPublicKey = "BEPN_Vc8S-FsTiBAsOKe4zDNEdtsxIVHL96H4EMIAWHdCXh3b4BBqbYCGpy1j2pjmYOXclRRBdJDMRqD05j0mbk";
 /* eslint-enable max-len */
 
 self.addEventListener('install', function(event) {
@@ -11,22 +9,6 @@ self.addEventListener('install', function(event) {
 self.addEventListener('activate', function(event) {
   console.log('Service Worker activating.');
 });
-
-function urlB64ToUint8Array(base64String) {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/\-/g, '+')
-    .replace(/_/g, '/');
-
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
-  }
-  return outputArray;
-}
-
 
 self.addEventListener('push', function(event) {
   console.log('[Service Worker] Push Received.');
@@ -50,6 +32,24 @@ self.addEventListener('push', function(event) {
     self.registration.showNotification(title, options)
   );
 });
+
+// const applicationServerPublicKey = "BEPN_Vc8S-FsTiBAsOKe4zDNEdtsxIVHL96H4EMIAWHdCXh3b4BBqbYCGpy1j2pjmYOXclRRBdJDMRqD05j0mbk";
+
+// function urlB64ToUint8Array(base64String) {
+//   const padding = '='.repeat((4 - base64String.length % 4) % 4);
+//   const base64 = (base64String + padding)
+//     .replace(/\-/g, '+')
+//     .replace(/_/g, '/');
+
+//   const rawData = window.atob(base64);
+//   const outputArray = new Uint8Array(rawData.length);
+
+//   for (let i = 0; i < rawData.length; ++i) {
+//     outputArray[i] = rawData.charCodeAt(i);
+//   }
+//   return outputArray;
+// }
+
 
 // self.addEventListener('notificationclick', function(event) {
 //   console.log('[Service Worker] Notification click Received.');
