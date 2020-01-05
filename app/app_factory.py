@@ -1,15 +1,13 @@
-from flask_sqlalchemy_booster import FlaskBooster
+from flask import Flask
 from .views import main_pages_bp, main_api_bp, admin_pages_bp, admin_api_bp
 from .models.core import db
 from .models.user import user_datastore
 from flask_security import Security
 
-security = Security()
-
 
 def create_app():
 
-    app = FlaskBooster(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True)
     app.config.from_object('app.config')
 
     # Create a folder called instance and create a file called
@@ -18,7 +16,7 @@ def create_app():
     app.config.from_pyfile('application.cfg.py')
 
     db.init_app(app)
-    security.init_app(app, user_datastore)
+    Security(app, user_datastore)
 
     app.register_blueprint(main_pages_bp)
     app.register_blueprint(main_api_bp, url_prefix="/api")
