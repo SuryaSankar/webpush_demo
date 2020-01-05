@@ -15,6 +15,14 @@ def create_app():
     # should not be version committed there
     app.config.from_pyfile('application.cfg.py')
 
+    app.config['SQLALCHEMY_DATABASE_URI'] = \
+        "mysql+mysqldb://{user}:{passwd}@{server}/{db}".format(
+            user=app.config['DB_USERNAME'],
+            passwd=app.config['DB_PASSWORD'],
+            server=app.config['DB_SERVER'],
+            db=app.config['DB_NAME']
+        )
+
     db.init_app(app)
     Security(app, user_datastore)
 
