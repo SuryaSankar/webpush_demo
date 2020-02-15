@@ -21,19 +21,12 @@ db.create_all()
 def home_page():
     return render_template("index.html")
 
-
-@app.route("/admin")
-def admin_page():
-    return render_template("admin.html")
-
-
 @app.route("/api/push-subscriptions", methods=["POST"])
 def create_push_subscription():
     json_data = request.get_json()
     subscription = PushSubscription.query.filter_by(
         subscription_json=json_data['subscription_json']
     ).first()
-    print("found subscription as ", subscription)
     if subscription is None:
         subscription = PushSubscription(
             subscription_json=json_data['subscription_json']
@@ -41,15 +34,23 @@ def create_push_subscription():
         db.session.add(subscription)
         db.session.commit()
     return jsonify({
-        "status": "success"
+        "status": "success",
+        "result": {
+            "id": subscription.id,
+            "subscription_json": subscription.subscription_json
+        }
     })
+
+
+@app.route("/admin")
+def admin_page():
+    return render_template("admin.html")
 
 
 @app.route("/admin-api/trigger-push-notifications", methods=["POST"])
 def trigger_push_notifications():
     json_data = request.get_json()
     subscriptions = PushSubscription.query.all()
-    print(subscriptions)
     results = trigger_push_notifications_for_subscriptions(
         subscriptions,
         json_data.get('title'),

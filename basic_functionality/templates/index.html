@@ -6,11 +6,11 @@
 	<h1>Webpush Demo</h1>
 	<script 
 		type="text/javascript" 
-		src="{{url_for('static', filename='register_service_worker.js')}}">
+		src="/static/register_service_worker.js">
 	</script>
 	<script type="text/javascript">
 		registerServiceWorker(
-			"{{url_for('static', filename='service_worker.js')}}",
+			"/static/service_worker.js",
 			"{{config['VAPID_PUBLIC_KEY']}}",
 			"/api/push-subscriptions"
 		);
